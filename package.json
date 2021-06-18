@@ -1,0 +1,21 @@
+{
+  "name": "Parcial",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.2"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0"
+  },
+  "description": "___\r # Parcial de Programación II\r - npm init -y\r - npm i express\r - npm i dotenv\r - npm i sequelize mysql2\r - npm i sequelize-cli --D\r ___\r - .gitignore ( para ignorar los archivos de Git).  \r - .env (Para declarar las variables de entorno)\r - .sequelizerc \r ___\r .gitignore → /node_modules/\r ___\r .env ↓\r >DB_USERNAME= root  \r DB_PASSWORD=  \r DB_HOST= localhost   \r DB_DATABASE=parcialCarrito  \r DB_PORT=3306  \r DB_DIALECT=mysql  \r ___\r .sequelizerc ↓\r >const path = require('path')  \r module.exports = {  \r config: path.resolve('./src/database/config', 'config.js'),  \r 'models-path': path.resolve('./src/database/models'),  \r 'seeders-path': path.resolve('./src/database/seeders'),  \r 'migrations-path': path.resolve('./src/database/migrations'),  \r }\r ___\r app.js ↓\r >const express = require('express');   \r const app = express();   \r const path = require('path');   \r const PORT = process.env.PORT || 3000   \r app.use(express.static(path.resolve(__dirname, '../public')));  \r app.use(express.json())  \r //URL encode  - Para que nos pueda llegar la información desde el formulario al req.body   \r app.use(express.urlencoded({ extended: false }));   \r app.use('/', (req, res) => res.json({ clave: \"con el server\" }));   \r app.listen(PORT, () => {   \r     console.log('Servidor corriendo en el puerto' + PORT)   \r }   \r );   \r ___\r Crear public/ y src/   \r Crear en src/ → src/app.js y src/routes/ y src/controller/\r ___\r >Ejecutar sequelize-cli init\r ___\r Entrar a src/database/config/config.js y reemplazar todo por ↓\r >// Para tomar lo parametros del env   \r require('dotenv').config()   \r module.exports =   \r {   \r     \"username\": process.env.DB_USERNAME,   \r     \"password\": process.env.DB_PASSWORD,   \r     \"database\": process.env.DB_DATABASE,   \r     \"host\": process.env.DB_HOST,   \r     \"port\": process.env.DB_PORT,   \r     \"dialect\": process.env.DB_DIALECT,   \r     seederStorage: \"sequelize\",   \r     seederStorageTableName: \"seeds\",    \r     migrationStorage: \"sequelize\",   \r     migrationStorageTableName: \"migrations\"   \r }   \r ___\r >### _**Crear todos los modelos intervinientes**_\r >>1\r >\r >>2 \r ___\r >### Crear todas las relaciones correpondientes \r >___ \r >Modelo PRODUCT   \r >  static associate(models){\r >      // belongsTo\r >      Product.belongsTo(models.Brand);\r >      // belongsTo\r >      Product.belongsTo(models.User);\r >      // belongsToMany\r >      Product.belongsToMany(models.Color, {\r >        as: 'colors',\r >        through: 'colorProduct',\r >      });\r >      // belongsToMany\r >      Product.belongsToMany(models.Category, {\r >        as: 'categories',\r >        through: 'CategoryProduct',\r >      });\r >    }\r >___\r >Modelo BRAND   \r >  static associate(models) {\r >      // hasMany\r >      Brand.hasMany(models.Product, {\r >        foreignKey: 'brandId',\r >        as: \"products\"\r >      })\r >    }\r >___\r >Modelo USER   \r >    static associate(models) {\r >  \t// hasMany\r >    User.hasMany(models.Product, {\r >      foreignKey: 'userId',\r >      as: \"products\"\r >    })\r >    }\r >___\r >Modelo COLOR  \r >    static associate(models) {\r >      Color.belongsToMany(models.Product, {\r >        as: 'products',\r >        through: 'colorProduct',\r >      }); \r >    }\r >___\r >Modelo CATEGORY\r >  static associate(models) {\r >      Category.belongsToMany(models.Product, {\r >        as: 'products',\r >        through: 'CategoryProduct',\r >      });\r >    }"
+}

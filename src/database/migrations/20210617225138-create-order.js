@@ -30,9 +30,9 @@ module.exports = {
       },
       user_addresses_id: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'addresses',
-          key: 'id'
+        references: {  
+          model: 'users',
+          key: 'addresses_id'
         }
       },
       states_id: {

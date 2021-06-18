@@ -137,7 +137,7 @@ static associate(models) {
     }  
 
 >**Modelo Product**  
-static associate(models) {  
+static associate(models) {
       // belongsTo  
       Product.belongsTo(models.Brand);  
       // belongsTo  
@@ -153,9 +153,9 @@ static associate(models) {
       })  
       Product.hasOne(models.OrderDetail, {  
         foreignKey: 'product_id',  
-        as: "orderDetails"  
-      })    
-    }  
+        as:'orders'  
+      })  
+    }
 
 >**Modelo Image**
 static associate(models) {  
@@ -168,27 +168,29 @@ static associate(models) {
       // hasOne  
       Address.hasOne(models.User, {  
         foreignKey: 'addresses_id',  
-        as: "users"  
+        as:'users'  
       })  
     }
 
 >**Modelo User**
 static associate(models) {  
-      // belongsTo  
-      User.belongsTo(models.Address);  
+      // belongsToOne  
+      User.belongsTo(models.Address,{  
+        foreignKey:'addresses_id'  
+      });  
       // hasMany  
       User.hasMany(models.Order, {  
         foreignKey: 'user_id',  
         as: "orders"  
       })  
-    }  
+    }   
 
 >**Modelo State**
 static associate(models) {  
       // hasOne  
       State.hasOne(models.Order, {  
         foreignKey: 'states_id',  
-        as: "orders"  
+        as:'orders'  
       })  
     }  
 
@@ -197,42 +199,50 @@ static associate(models) {
       // hasOne  
       Payment.hasOne(models.Order, {  
         foreignKey: 'payment_id',  
-        as: "orders"  
+        as:'orders'  
       })  
-    } 
+    }
 
 >**Modelo Order**
 static associate(models) {  
-      // belongsTo  
-      Order.belongsTo(models.Payment);  
+      // belongsToOne  
+      Order.belongsTo(models.Payment,{  
+        foreignKey:'payment_id'  
+      });  
       // belongsTo  
       Order.belongsTo(models.User);  
-      // belongsTo  
-      Order.belongsTo(models.State);  
+      // belongsToOne  
+      Order.belongsTo(models.State,{  
+        foreignKey:'states_id'  
+      });  
       // hasOne  
       Order.hasOne(models.Shipping, {  
         foreignKey: 'order_id',  
-        as: "shippings"  
+        as:'shippings'  
       })  
       // hasMany  
       Order.hasMany(models.OrderDetail, {  
         foreignKey: 'order_id',  
         as: "orderDetails"  
-      })   
-    }  
+      })  
+    }    
 
 >**Modelo Shipping**  
 static associate(models) {  
-      // belongsTo  
-      Shipping.belongsTo(models.Order);  
-    }  
+      // belongsToOne  
+      Shipping.belongsTo(models.Order,{  
+        foreignKey:'order_id'  
+      });  
+    } 
 
 >**Modelo OrderDetail**
 static associate(models) {  
       // belongsTo  
       OrderDetail.belongsTo(models.Order);  
-      // belongsTo  
-      OrderDetail.belongsTo(models.Product);  
+      // belongsToOne  
+      OrderDetail.belongsTo(models.Product,{  
+        foreignKey:'product_id'  
+      });  
     }  
 ___
 #### *AHORA HAY QUE AGREGAR LAS CLAVES FORANEAS A LAS  MIGRACIONES*
@@ -301,9 +311,9 @@ payment_id: {
       },  
       user_addresses_id: {  
         type: Sequelize.INTEGER,  
-        references: {  
-          model: 'addresses',  
-          key: 'id'  
+        references: {    
+          model: 'users',  
+          key: 'addresses_id'  
         }  
       },  
       states_id: {  

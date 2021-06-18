@@ -344,4 +344,4 @@ order_id: {
 - sequelize db:migrate
 ___
 >Y el resultado es así:
->>![Nos queda así]()
+>>![Nos queda así](https://raw.githubusercontent.com/Facundo-C/Parcial/main/ImagenDiagramaEER.png)
